@@ -20,8 +20,23 @@
               "icon": "lucide-file",
               "title": "20250413工作日誌"
             }
+          },
+          {
+            "id": "803398721b48c3cd",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "1 - Development Diary/20250415工作日誌.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "20250415工作日誌"
+            }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -94,7 +109,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "1 - Development Diary/20250413工作日誌.md",
+                "file": "1 - Development Diary/20250415工作日誌.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -104,7 +119,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "20250413工作日誌 的反向連結"
+              "title": "20250415工作日誌 的反向連結"
             }
           },
           {
@@ -165,13 +180,13 @@
       "command-palette:開啟命令面板": false
     }
   },
-  "active": "61b88c89ded20dc1",
+  "active": "803398721b48c3cd",
   "lastOpenFiles": [
     "1 - Development Diary/20250413工作日誌.md",
+    "1 - Development Diary/20250415工作日誌.md",
     "4 - Template/Diary.md",
     "4 - Template/Full name.md",
     "2 - Source Material/Clippings/How to Create a Great Local Python Development Environment with Docker.md",
-    "未命名.md",
     "2 - Source Material/Clippings",
     "2 - Source Material",
     "2 - Source Material/Clippings/How to Build a Local AI Agent With n8n (NO CODE!).md"
