@@ -10,7 +10,7 @@
    - 實現具體的業務邏輯
    - 配置特定的提示詞模板
    - 處理輸入輸出
-   - 例如：`auto_summarize.py`
+   - 例如：`auto_summarize.py`,`prompt_test.py`
 
 2. **提示詞層 (Prompt Layer)**
    - 管理對話歷史

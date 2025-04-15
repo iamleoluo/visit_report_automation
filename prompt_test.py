@@ -18,7 +18,7 @@ response1 = prompt_manager.chat(
 # 繼續對話（會自動保持歷史記錄）
 response2 = prompt_manager.chat(
     conversation_id=conversation_id,
-    user_input="請繼續我們的對話"
+    user_input="我想問你，你覺得我們的對話如何？"
 )
 
 # 查看歷史記錄
