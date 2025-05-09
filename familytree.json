@@ -1,0 +1,104 @@
+{
+  "persons": [
+    {
+      "id": "1",
+      "name": "李明宏",
+      "gender": "男",
+      "age": "45",
+      "alive": "存",
+      "marriage": "已婚",
+      "relations": {
+        "father": [
+          "2"
+        ],
+        "mother": [
+          "3"
+        ],
+        "spouse": [
+          "4"
+        ]
+      }
+    },
+    {
+      "id": "2",
+      "name": "李建國",
+      "gender": null,
+      "age": null,
+      "alive": "存",
+      "marriage": null,
+      "relations": {
+        "父親": [
+          "5"
+        ],
+        "母親": [
+          "6"
+        ]
+      }
+    },
+    {
+      "id": "3",
+      "name": "黃淑芬",
+      "gender": null,
+      "age": null,
+      "alive": "存",
+      "marriage": null,
+      "relations": {
+        "父親": [
+          "7"
+        ],
+        "母親": [
+          "8"
+        ]
+      }
+    },
+    {
+      "id": "4",
+      "name": "張惠雯",
+      "gender": "女",
+      "age": null,
+      "alive": null,
+      "marriage": null,
+      "relations": {
+        "spouse": [
+          "1"
+        ]
+      }
+    },
+    {
+      "id": "5",
+      "name": "李榮泰",
+      "gender": null,
+      "age": null,
+      "alive": "歿",
+      "marriage": null,
+      "relations": {}
+    },
+    {
+      "id": "6",
+      "name": "吳玉蘭",
+      "gender": null,
+      "age": null,
+      "alive": "歿",
+      "marriage": null,
+      "relations": {}
+    },
+    {
+      "id": "7",
+      "name": "黃振興",
+      "gender": null,
+      "age": null,
+      "alive": "歿",
+      "marriage": null,
+      "relations": {}
+    },
+    {
+      "id": "8",
+      "name": "林秋霞",
+      "gender": null,
+      "age": null,
+      "alive": "歿",
+      "marriage": null,
+      "relations": {}
+    }
+  ]
+}
