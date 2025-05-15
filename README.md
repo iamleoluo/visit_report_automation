@@ -1,164 +1,105 @@
-# Ollama Chat Framework
+# Ollama Prompt Application
 
-一個模組化的 Ollama 聊天框架，提供分層的對話管理和提示詞處理功能。
+本專案是一個基於 Ollama API 的自動化問答/摘要應用，核心邏輯集中於 `prompt_core`，主程式為 `run.py`，並透過 `run.json` 定義提示詞流程，`input.txt` 作為輸入資料來源。
 
-## 架構設計
+## 目標
 
-該框架採用三層架構：
+- 自動化處理訪談或個案報告等文本，根據自訂提示詞流程進行多輪問答。
+- 支援自定義 prompt 流程，靈活擴展。
 
-1. **應用層 (Application Layer)**
-   - 實現具體的業務邏輯
-   - 配置特定的提示詞模板
-   - 處理輸入輸出
-   - 例如：`auto_summarize.py`,`prompt_test.py`
+## 目錄結構
 
-2. **提示詞層 (Prompt Layer)**
-   - 管理對話歷史
-   - 處理提示詞模板
-   - 控制對話參數
-   - 位於：`prompt.py`
+```
+├── run.py           # 主應用程式，執行問答流程
+├── run.json         # 問答流程與提示詞設定
+├── input.txt        # 輸入文本（如個案報告）
+├── prompt_core/
+│   ├── prompt.py    # Prompt 管理與對話歷史
+│   ├── chat.py      # 與 Ollama API 溝通
+│   └── __init__.py
+├── requirements.txt # 依賴套件
+```
 
-3. **聊天層 (Chat Layer)**
-   - 處理與 Ollama API 的基礎通信
-   - 提供核心聊天功能
-   - 位於：`chat.py`
+## 安裝方式
 
-## 功能特點
-
-- 分層架構，職責分明
-- 完整的對話歷史管理
-- 靈活的提示詞模板系統
-- 支持流式輸出
-- 可調節的溫度參數
-- JSON 格式的結果保存
-
-## 安裝需求
-
-- Python 3.8 或更高版本
-- Ollama 服務
-- Python 依賴套件：
-  ```
-  ollama
-  ```
-
-## 快速開始
-
-1. 安裝 Ollama（如果尚未安裝）：
+1. 安裝 Python 3.8 以上
+2. 安裝 Ollama 並啟動服務：
    ```bash
    curl https://ollama.ai/install.sh | sh
+   ollama serve
    ```
-
-2. 安裝 Python 依賴：
+3. 安裝 Python 依賴：
    ```bash
    pip install -r requirements.txt
    ```
 
-3. 啟動 Ollama 服務：
+## 快速開始
+
+1. 準備你的輸入文本，放在 `input.txt`
+2. 設定你的問答流程與提示詞於 `run.json`
+3. 執行主程式：
    ```bash
-   ollama serve
+   python run.py
    ```
 
-## 使用示例
+### 範例 `run.json`
 
-### 基本使用
-
-```python
-from prompt import PromptManager
-import uuid
-
-# 初始化
-prompt_manager = PromptManager(model="llama3.2")
-conversation_id = str(uuid.uuid4())
-
-# 建立對話
-prompt_manager.create_conversation(conversation_id)
-
-# 進行對話
-response = prompt_manager.chat(
-    conversation_id=conversation_id,
-    user_input="你好",
-    system_prompt="你是一個友善的助手"
-)
-
-# 獲取對話歷史
-history = prompt_manager.get_conversation_history(conversation_id)
-
-# 清除對話歷史
-prompt_manager.clear_conversation(conversation_id)
+```json
+[
+  {
+    "label": "intro",
+    "type": "chat",
+    "template": "請根據以下內容開始問診：{input}"
+  },
+  {
+    "label": "has_children",
+    "type": "choice",
+    "question": "個案有沒有孩子？",
+    "choices": ["yes", "no"]
+  },
+  {
+    "label": "children_names",
+    "type": "text",
+    "question": "請輸入所有孩子的名字，用逗號分隔。",
+    "format": "name1,name2,name3"
+  }
+]
 ```
 
-### 文件摘要示例
+### 範例 `input.txt`
 
-```python
-from prompt import PromptManager
-import uuid
+（請參考專案內現有 input.txt 範例）
 
-# 初始化
-prompt_manager = PromptManager()
-conversation_id = str(uuid.uuid4())
+### 執行結果
 
-# 設置系統提示詞
-system_prompt = """
-你是一個專業的文件摘要助手。請遵循以下準則：
-1. 保持摘要簡潔但完整
-2. 突出文檔的主要觀點
-3. 使用客觀的語氣
-"""
+程式會依序根據 `run.json` 的流程，對 `input.txt` 內容進行多輪問答，並將每輪問題與 AI 回答印出，最後顯示完整對話歷史。
 
-# 進行摘要
-summary = prompt_manager.chat(
-    conversation_id=conversation_id,
-    user_input=f"請總結以下文檔：\n{text}",
-    system_prompt=system_prompt
-)
+## 核心說明
 
-# 保存結果
-with open("summary.json", "w") as f:
-    json.dump(summary, f)
-```
+### prompt_core
+- `prompt.py`：
+  - `PromptManager` 管理對話歷史、與 AI 互動、參數設定。
+  - `PromptLibrary` 載入/查詢 prompt 流程（如 run.json）。
+- `chat.py`：
+  - `ChatBot` 負責與 Ollama API 進行對話。
 
-## API 參考
+### 問答流程
+- `run.py` 會：
+  1. 載入 `run.json` 取得問答流程
+  2. 讀取 `input.txt` 作為初始輸入
+  3. 依序執行每個 prompt，將問題送給 AI 並取得回應
+  4. 印出每輪問答與完整對話歷史
 
-### PromptManager
+## 自訂/擴充
+- 你可以編輯 `run.json`，新增/修改/刪除 prompt 流程與問題。
+- 支援 `template`（可帶入 input）、`question`、`choices` 等欄位。
 
-主要的提示詞管理類，提供完整的對話管理功能。
-
-#### 方法
-
-- `__init__(model: str = "llama3.2", host: str = "http://127.0.0.1:11434")`
-  - 初始化提示詞管理器
-
-- `create_conversation(conversation_id: str) -> None`
-  - 建立新的對話
-
-- `chat(conversation_id: str, user_input: str, system_prompt: Optional[str] = None) -> str`
-  - 進行對話
-
-- `get_conversation_history(conversation_id: str) -> List[Dict[str, str]]`
-  - 獲取對話歷史
-
-- `clear_conversation(conversation_id: str) -> None`
-  - 清除對話歷史
-
-- `set_default_parameters(temperature: float = 0.0, stream: bool = False) -> None`
-  - 設置默認參數
-
-### ChatBot
-
-底層的聊天實現類，處理與 Ollama API 的直接通信。
-
-#### 方法
-
-- `__init__(model: str = "llama3.2", host: str = "http://127.0.0.1:11434")`
-  - 初始化聊天機器人
-
-- `chat(messages: List[Dict[str, str]], temperature: float = 0.0, stream: bool = False) -> str`
-  - 發送消息到 Ollama API
+## 依賴
+- Python 3.8+
+- [Ollama](https://ollama.ai/) 服務
+- Python 套件：ollama==0.1.6
 
 ## 注意事項
-
-1. 確保 Ollama 服務正在運行
-2. 妥善管理對話 ID
-3. 適時清理不需要的對話歷史
-4. 根據需求調整溫度參數
-5. 對於大型文本，建議使用流式輸出 
+- 請確保 Ollama 服務已啟動
+- 輸入檔案與 prompt 流程需正確設定
+- 目前僅支援單一對話流程（可自行擴充） 

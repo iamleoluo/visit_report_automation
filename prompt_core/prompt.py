@@ -1,5 +1,7 @@
 from typing import Optional, Dict, List
-from chat import ChatBot
+from prompt_core.chat import ChatBot
+import json
+import os
 
 class PromptManager:
     def __init__(self, model: str = "llama3.2", host: str = "http://127.0.0.1:11434"):
@@ -119,3 +121,41 @@ class PromptManager:
             bool: 是否成功刪除
         """
         return self.chat_bot.delete_conversation(conversation_id)
+
+class PromptLibrary:
+    """
+    管理 prompt.json，提供查詢/列出 prompt 元件的功能
+    """
+    def __init__(self, prompt_json_path: str = "prompt.json"):
+        self.prompt_json_path = prompt_json_path
+        self.prompts = self._load_prompts()
+
+    def _load_prompts(self) -> Dict[str, dict]:
+        if not os.path.exists(self.prompt_json_path):
+            return {}
+        with open(self.prompt_json_path, 'r', encoding='utf-8') as f:
+            try:
+                data = json.load(f)
+                if isinstance(data, list):
+                    return {item['label']: item for item in data}
+                else:
+                    return {}
+            except Exception as e:
+                print(f"載入 prompt.json 失敗: {e}")
+                return {}
+
+    def get_prompt(self, label: str) -> Optional[dict]:
+        prompt = self.prompts.get(label)
+        if not prompt:
+            return None
+        # 若是 choice 類型，自動加明確指示
+        if prompt.get('type') == 'choice':
+            choices = prompt.get('choices', [])
+            instruction = f"（請只回答以下選項之一：{', '.join(choices)}）"
+            # 合併問題與指示
+            prompt = prompt.copy()
+            prompt['question'] = prompt['question'].strip() + instruction
+        return prompt
+
+    def list_prompts(self) -> List[dict]:
+        return list(self.prompts.values())

@@ -1,0 +1,20 @@
+[
+  {
+    "label": "intro",
+    "type": "chat",
+    "template": "請根據以下內容開始問診：{input}"
+  },
+  {
+    "label": "has_children",
+    "type": "choice",
+    "question": "個案有沒有孩子？",
+    "choices": ["yes", "no"]
+  },
+  {
+    "label": "children_names",
+    "type": "text",
+    "question": "請輸入所有孩子的名字，用逗號分隔。",
+    "format": "name1,name2,name3"
+  }
+]
+  

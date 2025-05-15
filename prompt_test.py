@@ -1,4 +1,4 @@
-from prompt import PromptManager
+from prompt_core.prompt import PromptManager
 import uuid
 
 # 初始化

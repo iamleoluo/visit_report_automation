@@ -1,7 +1,7 @@
 # auto_summarize.py
 
 import os
-from prompt import PromptManager  # 改用 PromptManager
+from prompt_core.prompt import PromptManager  # 改用 PromptManager
 import uuid
 import json
 def read_document(file_path: str) -> str:
